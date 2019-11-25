@@ -1,4 +1,4 @@
-`use strict`;
+"use strict";
 
 const TASK_COUNT = 3;
 
@@ -480,4 +480,4 @@ new Array(TASK_COUNT)
     );
 
 const boardElement = siteMainElement.querySelector(`.board`);
-render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
+render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);\n
