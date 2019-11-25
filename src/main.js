@@ -1,3 +1,5 @@
+`use strict`;
+
 const TASK_COUNT = 3;
 
 const createSiteMenuTemplate = () => {
@@ -31,7 +33,7 @@ const createSiteMenuTemplate = () => {
       >
     </section>`
   );
-}
+};
 
 const createFilterTemplate = () => {
   return (
@@ -103,8 +105,8 @@ const createFilterTemplate = () => {
       >Archive <span class="filter__archive-count">115</span></label
     >
   </section>`
-  )
-}
+  );
+};
 
 const createBoardTemplate = () => {
   return (
@@ -118,11 +120,11 @@ const createBoardTemplate = () => {
         <div class="board__tasks"></div>
     </section>`
   );
-}
+};
 
 const createTaskTemplate = () => {
   return (
-      `<article class="card card--black">
+    `<article class="card card--black">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -188,7 +190,7 @@ const createTaskTemplate = () => {
       </div>
     </article>`
   );
-}
+};
 
 const createTaskEditTemplate = () => {
   return (
@@ -448,18 +450,18 @@ const createTaskEditTemplate = () => {
     </form>
   </article>`
   );
-}
+};
 
 const createLoadMoreButtonTemplate = () => {
   return (
     `<button class="load-more" type="button">load more</button>`
   );
-}
+};
 
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
-}
+};
 
 
 const siteHeaderElement = document.querySelector(`.main__control`);
@@ -478,4 +480,4 @@ new Array(TASK_COUNT)
     );
 
 const boardElement = siteMainElement.querySelector(`.board`);
-render(boardElement, createLoadMoreButtonTemplate(),`beforeend`);
+render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
