@@ -480,4 +480,4 @@ new Array(TASK_COUNT)
     );
 
 const boardElement = siteMainElement.querySelector(`.board`);
-render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);\n
+render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
