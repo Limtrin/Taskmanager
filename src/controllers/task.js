@@ -9,7 +9,7 @@ export default class TaskController {
     this._onDataChange = onDataChange;
     this._taskComponent = null;
     this._taskEditComponent = null;
-    
+
   }
 
   render(task) {
