@@ -2,47 +2,16 @@ import SortComponent, {SortType} from '../components/sort.js';
 import TasksComponent from '../components/tasks.js';
 import NoTasksComponent from '../components/no-tasks.js';
 import LoadMoreButtonComponent from '../components/load-more-button.js';
-import TaskEditComponent from '../components/task-edit.js';
-import TaskComponent from '../components/task.js';
-import {render, remove, replace, RenderPosition} from '../utils/render.js';
+import TaskController from './task.js';
+import {render, remove, RenderPosition} from '../utils/render.js';
 
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
-const renderTask = (taskListElement, task) => {
-
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      replaceEditToTask();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  const replaceEditToTask = () => {
-    replace(taskComponent, taskEditComponent);
-  };
-
-  const replaceTaskToEdit = () => {
-    replace(taskEditComponent, taskComponent);
-  };
-
-  const taskComponent = new TaskComponent(task);
-  taskComponent.setEditButtonClickHandler(() => {
-    replaceTaskToEdit();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
-
-  const taskEditComponent = new TaskEditComponent(task);
-  taskEditComponent.setSubmitHandler(replaceEditToTask);
-
-  render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
-};
-
 const renderTasks = (taskListElement, tasks) => {
   tasks.forEach((task) => {
-    renderTask(taskListElement, task);
+    const taskController = new TaskController(taskListElement);
+    taskController.render(task);
   });
 };
 
