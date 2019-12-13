@@ -3,11 +3,22 @@ import TaskEditComponent from '../components/task-edit.js';
 import {render, replace, RenderPosition} from '../utils/render.js';
 
 export default class TaskController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+
+    this._onDataChange = onDataChange;
+    this._taskComponent = null;
+    this._taskEditComponent = null;
+    
   }
 
   render(task) {
+    const oldTaskComponent = this._taskComponent;
+    const oldTaskEditComponent = this._taskEditComponent;
+
+    this._taskComponent = new TaskComponent(task);
+    this._taskEditComponent = new TaskEditComponent(task);
+
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
@@ -18,22 +29,37 @@ export default class TaskController {
     };
 
     const replaceEditToTask = () => {
-      replace(taskComponent, taskEditComponent);
+      replace(this._taskComponent, this._taskEditComponent);
     };
 
     const replaceTaskToEdit = () => {
-      replace(taskEditComponent, taskComponent);
+      replace(this._taskEditComponent, this._taskComponent);
     };
 
-    const taskComponent = new TaskComponent(task);
-    taskComponent.setEditButtonClickHandler(() => {
+    this._taskComponent.setEditButtonClickHandler(() => {
       replaceTaskToEdit();
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-    const taskEditComponent = new TaskEditComponent(task);
-    taskEditComponent.setSubmitHandler(replaceEditToTask);
+    this._taskComponent.setArchiveButtonClickHandler(() => {
+      this._onDataChange(this, task, Object.assign({}, task, {
+        isArchive: !task.isArchive
+      }));
+    });
 
-    render(this._container, taskComponent, RenderPosition.BEFOREEND);
+    this._taskComponent.setFavoritesButtonClickHandler(() => {
+      this._onDataChange(this, task, Object.assign({}, task, {
+        isFavorite: !task.isFavorite
+      }));
+    });
+
+    this._taskEditComponent.setSubmitHandler(replaceEditToTask);
+
+    if (oldTaskEditComponent && oldTaskComponent) {
+      replace(this._taskComponent, oldTaskComponent);
+      replace(this._taskEditComponent, oldTaskEditComponent);
+    } else {
+      render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
+    }
   }
 }
