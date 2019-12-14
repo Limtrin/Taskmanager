@@ -91,7 +91,7 @@ const createTaskEditTemplate = (task, options = {}) => {
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
-      <form class="card__form" method="get">
+      <form class="card__form" method="post">
         <div class="card__inner">
           <div class="card__color-bar">
               <svg class="card__color-bar-wave" width="100%" height="10">
@@ -187,6 +187,16 @@ export default class TaskEdit extends AbstractSmartComponent {
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
     });
+  }
+
+  reset() {
+    const task = this._task;
+
+    this._isDateShowing = !!task.dueDate;
+    this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
+    this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+
+    this.rerender();
   }
 
   setSubmitHandler(handler) {
