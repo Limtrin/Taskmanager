@@ -1,5 +1,7 @@
-import {Colors, Days, MonthNames} from '../const.js';
-import {formatTime} from '../utils/common.js';
+import {Colors, Days} from '../const.js';
+import {formatTime, formatDate} from '../utils/common.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import AbstractSmartComponent from './abstract-smart-component.js';
 
 const isRepeating = (repeatingDays) => {
@@ -79,7 +81,7 @@ const createTaskEditTemplate = (task, options = {}) => {
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
     (isRepeatingTask && !isRepeating(activeRepeatingDays));
 
-  const date = (isDateShowing && dueDate) ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
+  const date = (isDateShowing && dueDate) ? formatDate(dueDate) : ``;
   const time = (isDateShowing && dueDate) ? formatTime(dueDate) : ``;
 
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
@@ -91,7 +93,7 @@ const createTaskEditTemplate = (task, options = {}) => {
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
-      <form class="card__form" method="post">
+      <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__color-bar">
               <svg class="card__color-bar-wave" width="100%" height="10">
@@ -177,7 +179,9 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+    this._flatpickr = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
@@ -187,6 +191,12 @@ export default class TaskEdit extends AbstractSmartComponent {
       isRepeatingTask: this._isRepeatingTask,
       activeRepeatingDays: this._activeRepeatingDays,
     });
+  }
+
+  rerender() {
+    super.rerender();
+
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -206,6 +216,22 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   recoveryListeners() {
     this._subscribeOnEvents();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate,
+      });
+    }
   }
 
   _subscribeOnEvents() {
