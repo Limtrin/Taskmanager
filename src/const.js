@@ -24,4 +24,4 @@ export const FilterType = {
   REPEATING: `repeating`,
   TAGS: `tags`,
   ARCHIVE: `archive`
-}
+};
