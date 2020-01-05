@@ -27,9 +27,6 @@ const API = class {
       .then(Task.parseTasks);
   }
 
-  createTask(task) {
-  }
-
   updateTask(id, data) {
     return this._load({
       url: `tasks/${id}`,
@@ -39,9 +36,6 @@ const API = class {
     })
       .then((response) => response.json())
       .then(Task.parseTask);
-  }
-
-  deleteTask(id) {
   }
 
 
