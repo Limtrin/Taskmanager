@@ -14,7 +14,7 @@ export const Colors = [
   COLOR.PINK
 ];
 
-export const Days = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
+export const DAYS = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
 
 export const FilterType = {
   ALL: `all`,

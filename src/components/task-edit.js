@@ -1,4 +1,4 @@
-import {Colors, Days} from '../const.js';
+import {Colors, DAYS} from '../const.js';
 import {formatTime, formatDate, isRepeating, isOverdueDate} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -99,7 +99,7 @@ const createTaskEditTemplate = (task, options = {}) => {
 
   const tagsMarkup = createHashtags(tags);
   const colorsMarkup = createColorsMarkup(Colors, color);
-  const repeatingDaysMarkup = createRepeatingDaysMarkup(Days, activeRepeatingDays);
+  const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -181,26 +181,6 @@ const createTaskEditTemplate = (task, options = {}) => {
   );
 };
 
-const parseFormData = (formData) => {
-  const repeatingDays = Days.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-  const date = formData.get(`date`);
-
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    tags: formData.getAll(`hashtag`),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, repeatingDays),
-  };
-};
-
-
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -254,9 +234,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
-
-    return parseFormData(formData);
+    return new FormData(form);
   }
 
   setSubmitHandler(handler) {
